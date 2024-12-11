@@ -90,6 +90,7 @@ var (
 	ISResourceCrn                   string
 	ISCIDR                          string
 	ISCIDR2                         string
+	ISIPV4Address                   string
 	ISPublicSSHKeyFilePath          string
 	ISPrivateSSHKeyFilePath         string
 	ISAddressPrefixCIDR             string
@@ -421,6 +422,13 @@ var (
 	PcsOnboardingCatalogProductId                     string
 	PcsOnboardingCatalogPlanId                        string
 	PcsIamServiceRegistrationId                       string
+)
+
+// For cluster
+var (
+	ISClusterNetworkProfileName        string
+	ISInstanceGPUProfileName           string
+	ISClusterNetworkSubnetPrefixesCidr string
 )
 
 func init() {
@@ -767,11 +775,33 @@ func init() {
 		ISCIDR2 = "10.240.64.0/24"
 		fmt.Println("[INFO] Set the environment variable SL_CIDR_2 for testing ibm_is_subnet else it is set to default value '10.240.64.0/24'")
 	}
+	ISIPV4Address = os.Getenv("IS_IPV4_ADDRESS")
+	if ISIPV4Address == "" {
+		ISIPV4Address = "10.240.0.6"
+		fmt.Println("[INFO] Set the environment variable IS_IPV4_ADDRESS for testing ibm_is_instance else it is set to default value '10.240.0.6'")
+	}
 
 	AccountId = os.Getenv("IS_ACCOUNT_ID")
 	if AccountId == "" {
 		AccountId = "fee82deba12e4c0fb69c3b09d1f12345"
 		fmt.Println("[INFO] Set the environment variable IS_ACCOUNT_ID for testing private_path_service_gateway_account_policy else it is set to default value 'fee82deba12e4c0fb69c3b09d1f12345'")
+	}
+
+	ISClusterNetworkProfileName = os.Getenv("IS_CLUSTER_NETWORK_PROFILE_NAME")
+	if ISClusterNetworkProfileName == "" {
+		ISClusterNetworkProfileName = "h100"
+		fmt.Println("[INFO] Set the environment variable IS_CLUSTER_NETWORK_PROFILE_NAME for testing cluster_network_profile else it is set to default value 'h100'")
+	}
+	ISInstanceGPUProfileName = os.Getenv("IS_INSTANCE_GPU_PROFILE_NAME")
+	if ISInstanceGPUProfileName == "" {
+		ISInstanceGPUProfileName = "gx3d-160x1792x8h100"
+		fmt.Println("[INFO] Set the environment variable IS_INSTANCE_GPU_PROFILE_NAME for testing cluster_network_attachments else it is set to default value 'gx3d-160x1792x8h100'")
+	}
+
+	ISClusterNetworkSubnetPrefixesCidr = os.Getenv("IS_CLUSTER_NETWORK_SUBNET_PREFIXES_CIDR")
+	if ISClusterNetworkSubnetPrefixesCidr == "" {
+		ISClusterNetworkSubnetPrefixesCidr = "10.1.0.0/24"
+		fmt.Println("[INFO] Set the environment variable IS_CLUSTER_NETWORK_SUBNET_PREFIXES_CIDR for testing cluster_network else it is set to default value '10.1.0.0/24'")
 	}
 
 	ISAddressPrefixCIDR = os.Getenv("SL_ADDRESS_PREFIX_CIDR")
@@ -811,8 +841,8 @@ func init() {
 	IsImage = os.Getenv("IS_IMAGE")
 	if IsImage == "" {
 		// IsImage = "fc538f61-7dd6-4408-978c-c6b85b69fe76" // for classic infrastructure
-		IsImage = "r006-907911a7-0ffe-467e-8821-3cc9a0d82a39" // for next gen infrastructure ibm-centos-7-9-minimal-amd64-10 image
-		fmt.Println("[INFO] Set the environment variable IS_IMAGE for testing ibm_is_instance, ibm_is_floating_ip else it is set to default value 'r006-907911a7-0ffe-467e-8821-3cc9a0d82a39'")
+		IsImage = "r006-587a041d-9246-44f0-980b-56a327cf5bd7" // for next gen infrastructure ibm-ubuntu-24-04-6-minimal-amd64-1 us-south
+		fmt.Println("[INFO] Set the environment variable IS_IMAGE for testing ibm_is_instance, ibm_is_floating_ip else it is set to default value 'r006-587a041d-9246-44f0-980b-56a327cf5bd7'")
 	}
 
 	IsImage2 = os.Getenv("IS_IMAGE2")
